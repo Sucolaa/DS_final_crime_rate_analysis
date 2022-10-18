@@ -1,0 +1,63 @@
+---
+title: "DataScience_FinalProjectPlan"
+author: "HsuehJen Lu"
+date: "7/15/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# App title
+United States crime rate
+
+# Team members
+1. Hsueh-Jen Lu  
+2. Su Xu  
+3. Keyi Zhang  
+
+# Description
+This app is for people who want to quickly understand the crime rate of every state in the USA. Through this app, user can explore the dataset by reactive tables and plots. Beside that, user can understand what factors, such as GDP and number of guns, affect the crime rate through our regression model.
+
+# Proposed data sources
+Our crime data is from the uniform crime reporting of U.S. Department of Lustice. About other variables, we get the police number from the National Incident-Based Reporting System (NIBRS) and obtain the GDP data information of the each states on Wikipedia.
+
+# Overall Layout
+```{r echo=FALSE}
+knitr::include_graphics('/Users/xmvmxmvm11gmail.com//Downloads/1594792380093.jpg')
+```
+
+This App provides users with information about the crime rate in the United States from four aspects: background, table, plot and model. These titles will be distributed on the left side of the webpage. According to different choices of users, different information will be displayed in the middle of the webpage. In addition, there will also be some interactive buttons at the bottom of the page to help users choose the information they need.
+
+# Data Analysis and Visualization
+Users can click the table button to obtain crime data for each state, click the plot button, and then select the region to get different graphs, for example, barchart, histogram or Map, of crime rate and year.
+
+# Statistical Modeling
+We will build up regression models on crime rates and factors that affect crime rates, and discuss the relationship between each factor and crime rate. Users can also select a factor and the area to draw a conclusion about the relationship between the factor and the crime rate in the area, and they will get a summary of the regression analysis results about them.
+
+# Allocation of Responsibilities for the team:
+Collect data and tidy them in R: Keyi Zhang
+App development: Hsueh-Jen Lu, Su Xu
+
+
+#Project Steps/Schedule
+Project plan - 7/15
+
+Collect data and tidy them - 7/22
+
+Drafts about data analysis and building statistical models - 7/29
+
+Drafts about Shiny app and code - 7/30
+
+Discuss Shiny App and code with professor - 8/1
+
+Final Shiny App and code - 8/2
+
+Final document and ppt about project - 8/3
+
+Final Project Presentation - 8/5
+
+
+

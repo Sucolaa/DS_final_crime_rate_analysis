@@ -1,0 +1,127 @@
+---
+title: "**Crime analysis information by state(United State)**"
+author: "***HsuehJen Lu, Su Xu, Keyi Zhang***"
+date: "`08/05/2020`"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## **Description of the problem to be analyzed in this Shiny App:**
+This Shiny App is designed to help understand the **factors that affect the crime rate by state** in 51 states across the United States based on certain inputs and to provide **crime information in each state** of the United States. By using this Shiny App, residents who want to move can obtain information about the total number of crimes in each area, as well as the specific number of property crimes and violent crimes. For those who want to live in a safer area, it can help them quickly find out which area has a lower crime rate. At the same time, real estate sales staff can also use this Shiny App to attract more customers in areas with lower crime rates. In addition, government workers who use this Shiny App as a reference can easily obtain what factors affect the crime rate, and change this variable to improve the crime situation in this area.
+
+## **Required Packages (A-Z):**
+The following lists are the required packaged for this Shiny App:
+
+- [Dplyr (1.0.0)](https://cran.r-project.org/web/packages/dplyr/index.html): For advanced data manipulation, piping, and combining functions
+
+- [DT (1.13.0)](https://cran.r-project.org/web/packages/DT/index.html): The JavaScript Library 'DataTables'
+
+- [forcats (0.5.0)](https://cran.r-project.org/web/packages/forcats/index.html): Tools for Working with Categorical Variables (Factors)
+
+- [gganimate (1.0.6)](https://cran.r-project.org/web/packages/gganimate/index.html): A Grammar of Animated Graphics
+
+- [ggplot2 (3.3.2)](https://cran.r-project.org/web/packages/ggplot2/index.html): Create Elegant Data Visualisations Using the Grammar of Graphics
+
+- [ggrepel (0.8.2)](https://cran.r-project.org/web/packages/ggrepel/index.html): Automatically Position Non-Overlapping Text Labels with 'ggplot2'
+
+- [Ggthemes (4.2.0)](https://cran.r-project.org/web/packages/ggthemes/index.html): For providing extra themes, scales, and geoms, and functions for and related to ggplot2
+
+- [readr (1.3.1)](https://cran.r-project.org/web/packages/readr/index.html): Read Rectangular Text Data
+
+- [scales (1.1.1)](https://cran.r-project.org/web/packages/scales/index.html): Scale Functions for Visualization
+
+- [Shiny (1.5.0)](https://cran.r-project.org/web/packages/shiny/index.html): For building Shiny Apps
+
+- [Shinythemes (1.1.2)](https://cran.r-project.org/web/packages/shinythemes/index.html): For changing the themes for and related to shiny
+
+- [tidyr (1.1.1)](https://cran.r-project.org/web/packages/tidyr/index.html): Tidy Messy Data
+
+- [Usmap (0.5.0)](https://cran.r-project.org/web/packages/usmap/readme/README.html): For enabling the satellite views for graphing 
+
+## **Data Sources and Structure**
+
+The original data srouces are downloaded from FBI website, the National Incident-Based Reporting System (NIBRS) and Wikipedia.
+
+1.Gun number [here](https://www.fbi.gov/file-repository/nics_firearm_checks_-_year_by_state_type.pdf/view);
+
+2.Population [here](https://www.census.gov/data/tables/time-series/demo/popest/2010s-state-total.html);
+
+3.GDP [here](https://en.wikipedia.org/wiki/List_of_U.S._states_and_territories_by_GDP_per_capita);
+
+4.Prison population [here](https://www.bjs.gov/index.cfm?ty=tp&tid=131);
+
+5.Police number [here](https://www.bjs.gov/index.cfm?ty=tp&tid=71);
+
+After tidying the data, the dataframes we will use in this Shiny App are: 
+
+1. GDP, Population, Gun number, Prison popultion and Police number by state.
+
+2. Key measurement Crime dataset, which contains specific crime types data. Violent_crime, Murder, Forcible_rape, Robbey, Aggravated_assault, Property_crime, Burglary, Larceny_theft and Motor_vehicle_theft.
+
+3. Total_crime  means Number of reported crimes per 100,000 population.
+
+## **EDA Inputs, Controls, and Outputs**
+
+We have four tabs in our Shiny app and the first two tabs contains inputs, controls and outputs.
+
+### **Plot**
+This tab uses graph to show the trend of the crime rate in a specific stete. Users can select one or more states and select specific crime types for comparison. First, users can select a single or multiple states for general or specific analysis. In one general state analysis, the user can select a state in the drop-down list on the left, and select the variables that they want to know, and then set the time to obtain a bar chart and line chart of the trend of the crime rate in the state during a specific time period graph, and the trend of a particular variable. In the one state specific analysis, the user can select a state and a specific crime type from the drop-down list on the left, and then set the time period to obtain a line chart and a bar chart that can reflect the trend of the specific crime type during that time period. And a Pie chart about the proportion of this specific crime in the crime type. In the multiple state general analysis, the user can select up to five states for comparison. The user can also use the drop-down list on the left to select the states and the variable to be compared.
+
+### **Map**
+This tab provides an overview of the crime rate in each state in the United States. Two drop-down list are provided on the left for users to select a county and a year. The map on the upper right provides users with the total crime rate divided by state. It also shows the states with high crime rates. The table on the bottom right provides users with specific crime rate data according to their choices.
+
+## **Statistical Analysis Inputs, Controls, and Outputs**
+### **Model**
+Using the model helps to determine whether there is an significant  relationship between each variable and the crime rate. Users can select response variables and explanatory variables through the drop-down list on the left, and then the results of regression analysis will be provided on the right based on these two variables. The results make it easy for users to understand what factors affect crime
+
+### **Table**
+This tab includes the specific crime data and the number of guns, the number of police officers, the number of population and prison population in each state of the United States.
+
+#### *Variables:*
+- State (categorical): The name of each state
+
+- Year (date): The year that the crime was reported
+
+- Population (discrete): The total number of population
+
+- Total_crime (discrete): Number of reported crimes per 100,000 population
+
+- Violent_crime (discrete): Number of Violent crimes per 100,000 population
+
+- Property_crime (discrete): Number of Property crimes per 100,000 population
+
+- Prison_populaiton (discrete): The total number of prison population
+
+- GDP (discrete): The gross domestic product (GDP)
+
+The purpose of using this tab is to help users search for the required data. Users can quickly find the data by typing the key words or number in the search menu locates on the upper right corner.  
+
+#### *References:*
+
+- Article 1: [Impact of Crime and Corruption on GDP per capita An Empirical Analysis of Cross-Country Data](https://www.researchgate.net/publication/327622717_Impact_of_Crime_and_Corruption_on_GDP_per_capita_An_Empirical_Analysis_of_Cross-country_Data)
+
+- Article 2: [Violent Crime in America: A look at Factors Affecting Crime Levels in U.S. Cities](https://pdfs.semanticscholar.org/4e55/6d87129e6d735a7fe63396625120268bc0f4.pdf)
+
+- Article 3: [Four factors that explain both the rise and fall of US crime, 1970-2003.](https://www.researchgate.net/publication/247530390_Four_factors_that_explain_both_the_rise_and_fall_of_US_crime_1970-2003)
+
+- Article 4: [Some Determinants of Property Crime: Economic Factors Influence Criminal Behavior but Cannot Completely Explain the Syndrome](https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1536-7150.1987.tb01992.x)
+
+- Article 5: [Understanding Crime Trends](https://www.ncjrs.gov/pdffiles1/nij/142211.pdf)
+
+#### *Authors:*
+
+- HsuehJen Lu. Email: [hl4666a@student.american.edu](hl4666a@student.american.edu)
+
+- Su Xu. Email: [sx0301a@student.american.edu](sx0301a@student.american.edu)
+
+- Keyi Zhang. Email: [kz1197a@american.edu](kz1197a@american.edu)
+
+
+
+
+

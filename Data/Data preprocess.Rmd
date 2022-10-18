@@ -1,0 +1,732 @@
+---
+title: "FinalProject_data"
+author: "HsuehJen Lu"
+date: "7/20/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+library(dplyr)
+setwd("~/Desktop/datascience/Project/data/Final_project_data/offence_data")
+```
+
+
+```{r}
+library(varhandle)
+offence_2008 <- read.csv("arrest_2008.csv")
+offence_2008$row <- rep(1:nrow(offence_2008))
+for(i in 1:nrow(offence_2008)) {
+  if(offence_2008$row[i] >= 2 &&offence_2008$row[i]%%2 == 0){
+    offence_2008$State[i] <- offence_2008$State[i-1]
+  }
+}
+
+offence_2008 <-  offence_2008 %>%
+  filter(!State=="")
+   
+for(i in 3:length(offence_2008)){
+  offence_2008[i] <- unfactor(offence_2008[i])
+  if(is.character(offence_2008[[i]])){
+  offence_2008[[i]] <- parse_number(offence_2008[[i]])
+  }
+}
+
+
+for(i in 1:nrow(offence_2008)) {
+  if(offence_2008$row[i] >= 2 &&offence_2008$row[i]%%2 == 0){
+    # if(!is.na(offence_2008[i-1,j]) &&!is.na(offence_2008[i,j])){
+    for(j in (length(offence_2008)-1):length(offence_2008)){
+      offence_2008[i,j] <- offence_2008[i-1,j]
+    }
+    # }
+  }
+}
+
+offence_2008 <- offence_2008 %>% 
+  filter(X == "Total all ages") %>%
+  select(-X, -row) 
+offence_2008 <- offence_2008%>% 
+  mutate(Year = rep.int(2008,times = nrow(offence_2008))) 
+
+```
+
+```{r}
+library(varhandle)
+offence_2009 <- read.csv("arrest_2009.csv")
+offence_2009$row <- rep(1:nrow(offence_2009))
+for(i in 1:nrow(offence_2009)) {
+  if(offence_2009$row[i] >= 2 &&offence_2009$row[i]%%2 == 0){
+    offence_2009$State[i] <- offence_2009$State[i-1]
+  }
+}
+
+offence_2009 <-  offence_2009 %>%
+  filter(!State=="")
+   
+for(i in 3:length(offence_2009)){
+  offence_2009[i] <- unfactor(offence_2009[i])
+  if(is.character(offence_2009[[i]])){
+  offence_2009[[i]] <- parse_number(offence_2009[[i]])
+  }
+}
+
+
+for(i in 1:nrow(offence_2009)) {
+  if(offence_2009$row[i] >= 2 &&offence_2009$row[i]%%2 == 0){
+    # if(!is.na(offence_2009[i-1,j]) &&!is.na(offence_2009[i,j])){
+    for(j in (length(offence_2009)-1):length(offence_2009)){
+      offence_2009[i,j] <- offence_2009[i-1,j]
+    }
+    # }
+  }
+}
+
+offence_2009 <- offence_2009 %>% 
+  filter(X == "Total all ages") %>%
+  select(-X, -row) 
+offence_2009 <- offence_2009%>% 
+  mutate(Year = rep.int(2009,times = nrow(offence_2009))) 
+
+```
+
+```{r}
+library(varhandle)
+offence_2016 <- read.csv("arrest_2016.csv")
+offence_2016$row <- rep(1:nrow(offence_2016))
+for(i in 1:nrow(offence_2016)) {
+  if(offence_2016$row[i] >= 2 &&offence_2016$row[i]%%2 == 0){
+    offence_2016$State[i] <- offence_2016$State[i-1]
+  }
+}
+
+offence_2016 <-  offence_2016 %>%
+  filter(!State=="")
+   
+for(i in 3:length(offence_2016)){
+  offence_2016[i] <- unfactor(offence_2016[i])
+  if(is.character(offence_2016[[i]])){
+  offence_2016[[i]] <- parse_number(offence_2016[[i]])
+  }
+}
+
+
+for(i in 1:nrow(offence_2016)) {
+  if(offence_2016$row[i] >= 2 &&offence_2016$row[i]%%2 == 0){
+    # if(!is.na(offence_2016[i-1,j]) &&!is.na(offence_2016[i,j])){
+    for(j in (length(offence_2016)-1):length(offence_2016)){
+      offence_2016[i,j] <- offence_2016[i-1,j]
+    }
+    # }
+  }
+}
+
+offence_2016 <- offence_2016 %>% 
+  filter(X == "Total all ages") %>%
+  select(-X, -row) 
+offence_2016 <- offence_2016%>% 
+  mutate(Year = rep.int(2016,times = nrow(offence_2016))) 
+
+```
+
+```{r}
+datavariable <- names(offence_2008)
+offence_2008_2009_2016 <- offence_2008 %>%
+  merge(offence_2009,by = datavariable, all = TRUE) %>%
+  merge(offence_2016,by = datavariable, all = TRUE)
+write.csv(offence_2008_2009_2016,"offence_2008_2009_2016.csv",row.names = FALSE)
+```
+
+
+
+#########################
+```{r}
+names(offence_2010)
+```
+
+
+```{r}
+offence_2010 <- read.csv("arrest_2010.csv")
+
+offence_2010 <- offence_2010 %>%
+  mutate(Population = unfactor(Population),
+         Population = parse_number(Population),
+         Violentcrime = unfactor(Violentcrime),
+         Violentcrime = parse_number(Violentcrime),
+         Murder.andnonnegligentmanslaughter = unfactor(Murder.andnonnegligentmanslaughter),
+         Murder.andnonnegligentmanslaughter = parse_number(Murder.andnonnegligentmanslaughter),
+         Forciblerape = unfactor(Forciblerape),
+         Forciblerape = parse_number(Forciblerape),
+         Robbery = unfactor(Robbery),
+         Robbery = parse_number(Robbery),
+         Aggravatedassault = unfactor(Aggravatedassault),
+         Aggravatedassault = parse_number(Aggravatedassault),
+         Propertycrime = unfactor(Propertycrime),
+         Propertycrime = parse_number(Propertycrime),
+         Burglary = unfactor(Burglary),
+         Burglary = parse_number(Burglary),
+         Larceny.theft = unfactor(Larceny.theft),
+         Larceny.theft = parse_number(Larceny.theft),
+         Motorvehicletheft = unfactor(Motorvehicletheft),
+         Motorvehicletheft = parse_number(Motorvehicletheft))
+
+for(i in 2:nrow(offence_2010)){
+  if(offence_2010[i,5] == "Rate per 100,000 inhabitants"){
+    offence_2010[i,6] <-  offence_2010[i-1, 6]
+  }
+}
+
+offence_2010 <- offence_2010 %>%
+  filter(Var.5 == "Rate per 100,000 inhabitants")%>%
+  select(-Var.5, -Area, -X1, -X2) 
+offence_2010 <- offence_2010 %>%
+  mutate(Year = rep.int(2010,times = nrow(offence_2010)))
+```
+
+```{r}
+offence_2011 <- read.csv("arrest_2011.csv")
+offence_2011 <- offence_2011 %>%
+  mutate(Population = unfactor(Population),
+         Population = parse_number(Population),
+         Violentcrime = unfactor(Violentcrime),
+         Violentcrime = parse_number(Violentcrime),
+         Murder.andnonnegligentmanslaughter = unfactor(Murder.andnonnegligentmanslaughter),
+         Murder.andnonnegligentmanslaughter = parse_number(Murder.andnonnegligentmanslaughter),
+         Forciblerape = unfactor(Forciblerape),
+         Forciblerape = parse_number(Forciblerape),
+         Robbery = unfactor(Robbery),
+         Robbery = parse_number(Robbery),
+         Aggravatedassault = unfactor(Aggravatedassault),
+         Aggravatedassault = parse_number(Aggravatedassault),
+         Propertycrime = unfactor(Propertycrime),
+         Propertycrime = parse_number(Propertycrime),
+         Burglary = unfactor(Burglary),
+         Burglary = parse_number(Burglary),
+         Larceny.theft = unfactor(Larceny.theft),
+         Larceny.theft = parse_number(Larceny.theft),
+         Motorvehicletheft = unfactor(Motorvehicletheft),
+         Motorvehicletheft = parse_number(Motorvehicletheft))
+
+for(i in 2:nrow(offence_2011)){
+  if(offence_2011[i,5] == "Rate per 100,000 inhabitants"){
+    offence_2011[i,6] <-  offence_2011[i-1, 6]
+  }
+}
+
+offence_2011 <- offence_2011 %>%
+  filter(Var.5 == "Rate per 100,000 inhabitants")%>%
+  select(-Var.5, -Area, -X1, -X2) 
+offence_2011 <- offence_2011 %>%
+  mutate(Year = rep.int(2011,times = nrow(offence_2011)))
+```
+
+```{r}
+offence_2012 <- read.csv("arrest_2012.csv")
+offence_2012 <- offence_2012 %>%
+  mutate(Population = unfactor(Population),
+         Population = parse_number(Population),
+         Violentcrime = unfactor(Violentcrime),
+         Violentcrime = parse_number(Violentcrime),
+         Murder.andnonnegligentmanslaughter = unfactor(Murder.andnonnegligentmanslaughter),
+         Murder.andnonnegligentmanslaughter = parse_number(Murder.andnonnegligentmanslaughter),
+         Forciblerape = unfactor(Forciblerape),
+         Forciblerape = parse_number(Forciblerape),
+         Robbery = unfactor(Robbery),
+         Robbery = parse_number(Robbery),
+         Aggravatedassault = unfactor(Aggravatedassault),
+         Aggravatedassault = parse_number(Aggravatedassault),
+         Propertycrime = unfactor(Propertycrime),
+         Propertycrime = parse_number(Propertycrime),
+         Burglary = unfactor(Burglary),
+         Burglary = parse_number(Burglary),
+         Larceny.theft = unfactor(Larceny.theft),
+         Larceny.theft = parse_number(Larceny.theft),
+         Motorvehicletheft = unfactor(Motorvehicletheft),
+         Motorvehicletheft = parse_number(Motorvehicletheft))
+
+for(i in 2:nrow(offence_2012)){
+  if(offence_2012[i,5] == "Rate per 100,000 inhabitants"){
+    offence_2012[i,6] <-  offence_2012[i-1, 6]
+  }
+}
+
+offence_2012 <- offence_2012 %>%
+  filter(Var.5 == "Rate per 100,000 inhabitants")%>%
+  select(-Var.5, -Area, -X1, -X2) 
+offence_2012 <- offence_2012 %>%
+  mutate(Year = rep.int(2012,times = nrow(offence_2012)))
+```
+
+```{r}
+offence_2013 <- read.csv("arrest_2013.csv")
+offence_2013 <- offence_2013 %>%
+  mutate(Population = unfactor(Population),
+         Population = parse_number(Population),
+         Violentcrime = unfactor(Violentcrime),
+         Violentcrime = parse_number(Violentcrime),
+         Murder.andnonnegligentmanslaughter = unfactor(Murder.andnonnegligentmanslaughter),
+         Murder.andnonnegligentmanslaughter = parse_number(Murder.andnonnegligentmanslaughter),
+         Robbery = unfactor(Robbery),
+         Robbery = parse_number(Robbery),
+         Aggravatedassault = unfactor(Aggravatedassault),
+         Aggravatedassault = parse_number(Aggravatedassault),
+         Propertycrime = unfactor(Propertycrime),
+         Propertycrime = parse_number(Propertycrime),
+         Burglary = unfactor(Burglary),
+         Burglary = parse_number(Burglary),
+         Larceny.theft = unfactor(Larceny.theft),
+         Larceny.theft = parse_number(Larceny.theft),
+         Motorvehicletheft = unfactor(Motorvehicletheft),
+         Motorvehicletheft = parse_number(Motorvehicletheft))
+
+for(i in 2:nrow(offence_2013)){
+  if(offence_2013[i,5] == "Rate per 100,000 inhabitants"){
+    offence_2013[i,6] <-  offence_2013[i-1, 6]
+  }
+}
+
+offence_2013 <- offence_2013 %>%
+  filter(Var.5 == "Rate per 100,000 inhabitants")%>%
+  select(-Var.5, -Area, -X1, -X2) 
+offence_2013 <- offence_2013 %>%
+  mutate(Year = rep.int(2013,times = nrow(offence_2013))) 
+```
+
+```{r}
+offence_2014 <- read.csv("arrest_2014.csv")
+offence_2014 <- offence_2014 %>%
+  mutate(Population = unfactor(Population),
+         Population = parse_number(Population),
+         Violentcrime = unfactor(Violentcrime),
+         Violentcrime = parse_number(Violentcrime),
+         Murder.andnonnegligentmanslaughter = unfactor(Murder.andnonnegligentmanslaughter),
+         Murder.andnonnegligentmanslaughter = parse_number(Murder.andnonnegligentmanslaughter),
+         Robbery = unfactor(Robbery),
+         Robbery = parse_number(Robbery),
+         Aggravatedassault = unfactor(Aggravatedassault),
+         Aggravatedassault = parse_number(Aggravatedassault),
+         Propertycrime = unfactor(Propertycrime),
+         Propertycrime = parse_number(Propertycrime),
+         Burglary = unfactor(Burglary),
+         Burglary = parse_number(Burglary),
+         Larceny.theft = unfactor(Larceny.theft),
+         Larceny.theft = parse_number(Larceny.theft),
+         Motorvehicletheft = unfactor(Motorvehicletheft),
+         Motorvehicletheft = parse_number(Motorvehicletheft))
+
+for(i in 2:nrow(offence_2014)){
+  if(offence_2014[i,3] == "Rate per 100,000 inhabitants"){
+    offence_2014[i,4] <-  offence_2014[i-1, 4]
+  }
+}
+
+offence_2014 <- offence_2014 %>%
+  filter(Var.5 == "Rate per 100,000 inhabitants")%>%
+  select(-Var.5, -Area) 
+offence_2014 <- offence_2014 %>%
+  mutate(Year = rep.int(2014,times = nrow(offence_2014)))
+```
+
+```{r}
+offence_2015 <- read.csv("arrest_2015.csv")
+offence_2015 <- offence_2015 %>%
+ mutate(Population = unfactor(Population),
+         Population = parse_number(Population),
+         Violentcrime = unfactor(Violentcrime),
+         Violentcrime = parse_number(Violentcrime),
+         Murder.andnonnegligentmanslaughter = unfactor(Murder.andnonnegligentmanslaughter),
+         Murder.andnonnegligentmanslaughter = parse_number(Murder.andnonnegligentmanslaughter),
+         Robbery = unfactor(Robbery),
+         Robbery = parse_number(Robbery),
+         Aggravatedassault = unfactor(Aggravatedassault),
+         Aggravatedassault = parse_number(Aggravatedassault),
+         Propertycrime = unfactor(Propertycrime),
+         Propertycrime = parse_number(Propertycrime),
+         Burglary = unfactor(Burglary),
+         Burglary = parse_number(Burglary),
+         Larceny.theft = unfactor(Larceny.theft),
+         Larceny.theft = parse_number(Larceny.theft),
+         Motorvehicletheft = unfactor(Motorvehicletheft),
+         Motorvehicletheft = parse_number(Motorvehicletheft))
+
+for(i in 2:nrow(offence_2015)){
+  if(offence_2015[i,3] == "Rate per 100,000 inhabitants"){
+    offence_2015[i,4] <-  offence_2015[i-1, 4]
+  }
+}
+
+offence_2015 <- offence_2015 %>%
+  filter(Var.5 == "Rate per 100,000 inhabitants")%>%
+  select(-Var.5, -Area) 
+offence_2015 <- offence_2015 %>%
+  mutate(Year = rep.int(2015,times = nrow(offence_2015)))
+
+```
+
+
+```{r}
+offence_2017 <- read.csv("arrest_2017.csv")
+offence_2017 <- offence_2017 %>%
+  mutate(Population = unfactor(Population),
+         Population = parse_number(Population),
+         Violentcrime = unfactor(Violentcrime),
+         Violentcrime = parse_number(Violentcrime),
+         Murder.andnonnegligentmanslaughter = unfactor(Murder.andnonnegligentmanslaughter),
+         Murder.andnonnegligentmanslaughter = parse_number(Murder.andnonnegligentmanslaughter),
+         Forciblerape = unfactor(Forciblerape),
+         Forciblerape = parse_number(Forciblerape),
+         Robbery = unfactor(Robbery),
+         Robbery = parse_number(Robbery),
+         Aggravatedassault = unfactor(Aggravatedassault),
+         Aggravatedassault = parse_number(Aggravatedassault),
+         Propertycrime = unfactor(Propertycrime),
+         Propertycrime = parse_number(Propertycrime),
+         Burglary = unfactor(Burglary),
+         Burglary = parse_number(Burglary),
+         Larceny.theft = unfactor(Larceny.theft),
+         Larceny.theft = parse_number(Larceny.theft),
+         Motorvehicletheft = unfactor(Motorvehicletheft),
+         Motorvehicletheft = parse_number(Motorvehicletheft))
+
+for(i in 2:nrow(offence_2017)){
+  if(offence_2017[i,3] == "Rate per 100,000 inhabitants"){
+    offence_2017[i,4] <-  offence_2017[i-1, 4]
+  }
+}
+
+offence_2017 <- offence_2017 %>%
+  filter(Var.5 == "Rate per 100,000 inhabitants")%>%
+  select(-Var.5, -Area) 
+offence_2017 <- offence_2017 %>%
+  mutate(Year = rep.int(2017,times = nrow(offence_2017)))
+```
+
+```{r}
+offence_2018 <- read.csv("arrest_2018.csv")
+offence_2018 <- offence_2018 %>%
+  mutate(Population = unfactor(Population),
+         Population = parse_number(Population),
+         Violentcrime = unfactor(Violentcrime),
+         Violentcrime = parse_number(Violentcrime),
+         Murder.andnonnegligentmanslaughter = unfactor(Murder.andnonnegligentmanslaughter),
+         Murder.andnonnegligentmanslaughter = parse_number(Murder.andnonnegligentmanslaughter),
+         Forciblerape = unfactor(Forciblerape),
+         Forciblerape = parse_number(Forciblerape),
+         Robbery = unfactor(Robbery),
+         Robbery = parse_number(Robbery),
+         Aggravatedassault = unfactor(Aggravatedassault),
+         Aggravatedassault = parse_number(Aggravatedassault),
+         Propertycrime = unfactor(Propertycrime),
+         Propertycrime = parse_number(Propertycrime),
+         Burglary = unfactor(Burglary),
+         Burglary = parse_number(Burglary),
+         Larceny.theft = unfactor(Larceny.theft),
+         Larceny.theft = parse_number(Larceny.theft),
+         Motorvehicletheft = unfactor(Motorvehicletheft),
+         Motorvehicletheft = parse_number(Motorvehicletheft))
+
+for(i in 2:nrow(offence_2018)){
+  if(offence_2018[i,3] == "Rate per 100,000 inhabitants"){
+    offence_2018[i,4] <-  offence_2018[i-1, 4]
+  }
+}
+
+offence_2018 <- offence_2018 %>%
+  filter(Var.5 == "Rate per 100,000 inhabitants")%>%
+  select(-Var.5, -Area) 
+offence_2018 <- offence_2018 %>%
+  mutate(Year = rep.int(2018,times = nrow(offence_2018)))
+```
+
+```{r}
+datavariable <- names(offence_2010)
+offence_other <- offence_2010 %>%
+  merge(offence_2011,by = datavariable, all = TRUE)%>%
+  merge(offence_2012,by = datavariable, all = TRUE)%>%
+  merge(offence_2013,by = datavariable, all = TRUE)%>%
+  merge(offence_2014,by = datavariable, all = TRUE)%>%
+  merge(offence_2015,by = datavariable, all = TRUE)%>%
+  merge(offence_2017,by = datavariable, all = TRUE)%>%
+  merge(offence_2018,by = datavariable, all = TRUE)
+
+
+
+# for(i in 2:(length(offence_other)-1)){
+#   offence_other[i] <- unfactor(offence_other[i])
+#   if(is.character(offence_other[[i]])){
+#   offence_other[[i]] <- parse_number(offence_other[[i]])
+#   }
+# }
+
+write.csv(offence_other,"offence_other.csv",row.names = FALSE)
+```
+
+```{r}
+offence_2008_2009_2016 <- read.csv("offence_2008_2009_2016.csv")
+offence_other <- read.csv("offence_other.csv")
+```
+
+```{r}
+offence_2008_2009_2016 <- offence_2008_2009_2016 %>%
+  rename("Violentcrime" = "Violent.crime2", "Murder.andnonnegligentmanslaughter" = "Murder.and.nonnegligent.manslaughter", "Forciblerape" = "Forcible.rape", "Aggravatedassault" = "Aggravated.assault" , "Propertycrime" = "Property.crime2", "Motorvehicletheft" = "Motor.vehicle.theft" )
+```
+
+```{r}
+datavariable <- names(offence_other)
+offence_2008_2009_2016 <- offence_2008_2009_2016 %>%
+  select(datavariable)
+offence_all <- offence_other %>%
+  merge(offence_2008_2009_2016,by = datavariable, all = TRUE)
+```
+
+```{r}
+offence_all <- offence_all %>%
+  mutate(State = str_replace(State, "\\d$", "")) %>%
+  arrange(State, Year)
+```
+
+```{r}
+test <- offence_all %>%
+  filter(Year == 2008| Year == 2009| Year == 2016)
+for(j in 3:(length(test)-1)){
+for(i in 1:nrow(test)){
+    test[[i,j]] <- test[[i,j]]/test[[i,2]]*100000
+}
+}
+```
+
+```{r}
+datavariable <- names(offence_other)
+offence_all <- offence_other %>%
+  merge(test,by = datavariable, all = TRUE)
+
+write.csv(offence_all,"offence_all.csv",row.names = FALSE)
+```
+
+
+#########
+```{r}
+
+```
+
+```{r}
+setwd("~/Desktop/datascience/Project/final-project-crime-rate-analysis/data/Final_project_data")
+prison <- read_csv("prison population2.csv")
+prison <- prison %>%
+  select(-X2, -X13) %>%
+  rename("State" = "Jurisdiction", "2019" = "2020") %>%
+  filter(!State=="") %>%
+  pivot_longer(cols = starts_with("20"), names_to = "Year", values_to = "Prison_population") %>%
+  mutate(Year = as.numeric(Year),
+         State = str_to_upper(State),
+         State = str_replace(State, "\\/.*$", ""),
+         State = str_replace(State, "B\\,.*$", ""),
+         State = str_replace(State, "ARIZONAC", "ARIZONA"))
+```
+
+```{r}
+setwd("~/Desktop/datascience/Project/final-project-crime-rate-analysis/data/Final_project_data")
+GDP <- read.csv("GDP 1997-2019 by state2.csv")
+GDP <-  GDP %>%
+  select(-GeoFips) %>%
+  rename("State" = "GeoName") %>%
+  pivot_longer(cols = starts_with("X"), names_to = "Year", values_to = "GDP") %>%
+  mutate(Year = parse_number(Year),
+         State = str_to_upper(State))
+```
+
+```{r}
+setwd("~/Desktop/datascience/Project/final-project-crime-rate-analysis/data/Final_project_data")
+Gun <- read.csv("2008-2020 gun number2.csv")
+Gun <- Gun %>%
+  rename("State" = "State...Territory") %>%
+  pivot_longer(cols = starts_with("X"), names_to = "Year", values_to = "Gun_number") %>%
+  mutate(Year = parse_number(Year),
+         State = str_to_upper(State))
+```
+
+```{r}
+setwd("~/Desktop/datascience/Project/data/Final_project_data/offence_data")
+crime <- read.csv("offence_all.csv")
+crime <- crime %>%
+  mutate(State = str_replace(State, "\\d.*$", ""))
+```
+
+```{r}
+crime <- crime %>%
+  left_join(prison, by = c("State", "Year")) %>%
+  left_join(GDP, by = c("State", "Year")) %>%
+  left_join(Gun, by = c("State", "Year")) 
+
+#write.csv(crime,"CrimeRate_data.csv",row.names = FALSE)
+```
+
+####
+```{r}
+setwd("~/Desktop/datascience/Project/data/Final_project_data/police_employee_data")
+police_2016 <- read.csv("2016_police_data_special.csv")
+
+police_2016 <- police_2016 %>%
+  select(State,Total.law.enforcement.employees) %>%
+  rename("Police_number" = "Total.law.enforcement.employees") 
+
+for(i in 2:nrow(police_2016)){
+  if(police_2016[i,1] == ""){
+    police_2016[i,1] <- police_2016[i-1,1]
+  }
+}
+
+police_2016 <- police_2016 %>%
+  mutate(Police_number = unfactor(Police_number),
+         Police_number = parse_number(Police_number)) %>%
+  group_by(State) %>%
+  summarise(Police_number = sum(Police_number)) %>%
+  mutate(Year = 2016)
+
+```
+
+```{r}
+setwd("~/Desktop/datascience/Project/final-project-crime-rate-analysis/data/Final_project_data/police_employee_data")
+police_2008 <- read.csv("police_2008.csv")
+police_2008 <- police_2008 %>%
+  select(State, Total.law.enforcement.employees) %>%
+  rename("Police_number" = "Total.law.enforcement.employees")  %>%
+  mutate(Year = 2008)
+```
+
+```{r}
+setwd("~/Desktop/datascience/Project/final-project-crime-rate-analysis/data/Final_project_data/police_employee_data")
+police_2009 <- read.csv("police_2009.csv")
+police_2009 <- police_2009 %>%
+  select(State, Total.law.enforcement.employees) %>%
+  rename("Police_number" = "Total.law.enforcement.employees") %>%
+  mutate(Year = 2009)
+```
+
+```{r}
+setwd("~/Desktop/datascience/Project/final-project-crime-rate-analysis/data/Final_project_data/police_employee_data")
+police_2010 <- read.csv("police_2010.csv")
+police_2010 <- police_2010 %>%
+  select(State, Total.law.enforcement.employees) %>%
+  rename("Police_number" = "Total.law.enforcement.employees") %>%
+  mutate(Police_number = unfactor(Police_number),
+         Police_number = parse_number(Police_number),
+         Year = 2010)
+```
+
+
+```{r}
+setwd("~/Desktop/datascience/Project/final-project-crime-rate-analysis/data/Final_project_data/police_employee_data")
+police_2011 <- read.csv("police_2011.csv")
+police_2011 <- police_2011 %>%
+  select(State, Total.lawenforcementemployees) %>%
+  rename("Police_number" = "Total.lawenforcementemployees") %>%
+  mutate(Police_number = unfactor(Police_number),
+         Police_number = parse_number(Police_number),
+         Year = 2011)
+```
+
+```{r}
+setwd("~/Desktop/datascience/Project/final-project-crime-rate-analysis/data/Final_project_data/police_employee_data")
+police_2012 <- read.csv("police_2012.csv")
+police_2012 <- police_2012 %>%
+  select(State, Total.lawenforcementemployees) %>%
+  rename("Police_number" = "Total.lawenforcementemployees") %>%
+  mutate(Police_number = unfactor(Police_number),
+         Police_number = parse_number(Police_number),
+         Year = 2012)
+```
+
+```{r}
+setwd("~/Desktop/datascience/Project/final-project-crime-rate-analysis/data/Final_project_data/police_employee_data")
+police_2013 <- read.csv("police_2013.csv")
+police_2013 <- police_2013 %>%
+  select(State, Total.lawenforcementemployees) %>%
+  rename("Police_number" = "Total.lawenforcementemployees") %>%
+  mutate(Police_number = unfactor(Police_number),
+         Police_number = parse_number(Police_number),
+         Year = 2013)
+```
+
+```{r}
+setwd("~/Desktop/datascience/Project/final-project-crime-rate-analysis/data/Final_project_data/police_employee_data")
+police_2014 <- read.csv("police_2014.csv")
+police_2014 <- police_2014 %>%
+  select(State, Total.lawenforcementemployees) %>%
+  rename("Police_number" = "Total.lawenforcementemployees") %>%
+  mutate(Police_number = unfactor(Police_number),
+         Police_number = parse_number(Police_number),
+         Year = 2014)
+```
+
+```{r}
+setwd("~/Desktop/datascience/Project/final-project-crime-rate-analysis/data/Final_project_data/police_employee_data")
+police_2015 <- read.csv("police_2015.csv")
+police_2015 <- police_2015 %>%
+  select(State, Total.lawenforcementemployees) %>%
+  rename("Police_number" = "Total.lawenforcementemployees") %>%
+  mutate(Police_number = unfactor(Police_number),
+         Police_number = parse_number(Police_number),
+         Year = 2015)
+```
+
+```{r}
+setwd("~/Desktop/datascience/Project/final-project-crime-rate-analysis/data/Final_project_data/police_employee_data")
+police_2017 <- read.csv("police_2017.csv")
+police_2017 <- police_2017 %>%
+  select(State, Total.lawenforcementemployees) %>%
+  rename("Police_number" = "Total.lawenforcementemployees") %>%
+  mutate(Police_number = unfactor(Police_number),
+         Police_number = parse_number(Police_number),
+         Year = 2017)
+```
+
+```{r}
+setwd("~/Desktop/datascience/Project/final-project-crime-rate-analysis/data/Final_project_data/police_employee_data")
+police_2018 <- read.csv("police_2018.csv")
+police_2018 <- police_2018 %>%
+  select(State, Total.lawenforcementemployees) %>%
+  rename("Police_number" = "Total.lawenforcementemployees") %>%
+  mutate(Police_number = unfactor(Police_number),
+         Police_number = parse_number(Police_number),
+         Year = 2018)
+```
+
+```{r}
+datavariable <- names(police_2016)
+police_number <- police_2016 %>%
+  merge(police_2008,by = datavariable, all = TRUE) %>%
+  merge(police_2009,by = datavariable, all = TRUE) %>%
+  merge(police_2010,by = datavariable, all = TRUE) %>%
+  merge(police_2011,by = datavariable, all = TRUE) %>%
+  merge(police_2012,by = datavariable, all = TRUE) %>%
+  merge(police_2013,by = datavariable, all = TRUE) %>%
+  merge(police_2014,by = datavariable, all = TRUE) %>%
+  merge(police_2015,by = datavariable, all = TRUE) %>%
+  merge(police_2017,by = datavariable, all = TRUE) %>%
+  merge(police_2018,by = datavariable, all = TRUE)
+
+```
+
+```{r}
+setwd("~/Desktop/datascience/Project/data")
+crime <- read.csv("CrimeRate_data.csv")
+crime <- crime %>%
+  left_join(police_number, by = c("State", "Year")) 
+# 
+# crime %>% 
+#   mutate(Total_Crime_Rate = (Violentcrime + Propertycrime)/Population*100000)
+# write.csv(crime,"CrimeRate_data.csv",row.names = FALSE)
+```
+
+
+```{r}
+crime <- crime %>%
+  left_join(police_number, by = c("State", "Year")) 
+write.csv(crime,"CrimeRate_data.csv",row.names = FALSE)
+```
+
+
+
